@@ -1,0 +1,3 @@
+#ifndef TEST_NORMALIZATION_H
+#define TEST_NORMALIZATION_H
+#endif
