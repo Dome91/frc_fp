@@ -1,4 +1,9 @@
 #include <stdlib.h>
+#include <math.h>
+#include <stdio.h>
+
+#include "compression.h"
+#include "decompression.h"
 #include "frc_fp.h"
 
 char* compress(float* values, int dim, int* sizes, int bits_per_block){
@@ -9,13 +14,13 @@ char* compress(float* values, int dim, int* sizes, int bits_per_block){
   // Start compression in correct dimension
   switch(dim){
     case 1:
-      compress_1d(values, dim, sizes, bits_per_block, result);
+      compress_1d(values, sizes, bits_per_block, result);
       break;
     case 2:
-      compress_1d(values, dim, sizes, bits_per_block, result);
+      compress_1d(values, sizes, bits_per_block, result);
       break;
     case 3:
-      compress_1d(values, dim, sizes, bits_per_block, result);
+      compress_1d(values, sizes, bits_per_block, result);
       break;
     default:
       printf("Only up to dimension 3 is supported!\n");
@@ -31,13 +36,13 @@ float* decompress(char* values, int dim, int* sizes, int bits_per_block){
   float* result = (float*) malloc(size_of_result);
   switch (dim) {
     case 1:
-      decompress_1d(values, dim, sizes, bits_per_block, result);
+      decompress_1d(values, sizes, bits_per_block, result);
       break;
     case 2:
-      decompress_2d(values, dim, sizes, bits_per_block, result);
+      decompress_2d(values, sizes, bits_per_block, result);
       break;
     case 3:
-      decompress_3d(values, dim, sizes, bits_per_block, result);
+      decompress_3d(values, sizes, bits_per_block, result);
       break;
     default:
       printf("Only up to dimension 3 is supported!\n");

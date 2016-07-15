@@ -24,5 +24,13 @@ struct frc_fp{
   float* (*decompress)(char* values, int dim, int* sizes, int bits_per_block);
 };
 
+/**
+ * Returns the number of blocks the values are divided into
+ * @param  dim   Dimension of the values
+ * @param  sizes Size of each dimension
+ * @return       Number of blocks the values are divided into
+ */
+long get_num_blocks(int dim, int* sizes);
+
 extern const struct frc_fp FRC_FP;
 #endif
