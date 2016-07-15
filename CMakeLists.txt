@@ -14,7 +14,9 @@ include_directories(include)
 
 # Include source files
 set(SOURCE
-	src/frc_fp.c)
+	src/frc_fp.c
+	src/normalization.c
+	src/transformation.c)
 
 # Specify library
 add_library(frc_fp STATIC ${SOURCE})
@@ -22,7 +24,9 @@ add_library(frc_fp STATIC ${SOURCE})
 # Add source files for testing
 set(TEST_SOURCE
 	test/tests.c
-	test/unity.c)
+	test/unity.c
+	test/test_normalization.c
+	test/test_transformation.c)
 
 # Add executable for testing
 add_executable(test ${TEST_SOURCE})

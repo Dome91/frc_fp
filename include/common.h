@@ -4,9 +4,9 @@
 typedef union {
   float f;
   struct {
-    uint32_t mantissa : 23;
-    uint32_t exponent : 8;
-    uint32_t sign : 1;
+    unsigned int mantissa : 23;
+    unsigned int exponent : 8;
+    unsigned int sign : 1;
   } parts;
 } float_cast;
 
