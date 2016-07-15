@@ -33,23 +33,23 @@ void test_fwd_inv_transform(){
   }
 
   // 3 - dimensional
-  for (uint32_t z = 0; z < 4; z++)
-		for (uint32_t y = 0; y < 4; y++)
+  for (uint32_t z = 0; z < 4; ++z)
+		for (uint32_t y = 0; y < 4; ++y)
 			fwd_transform(fc, z + y * 4, 16);
-	for (uint32_t x = 0; x < 4; x++)
+	for (uint32_t x = 0; x < 4; ++x)
 		for (uint32_t z = 0; z < 4; z++)
 			fwd_transform(fc, z + x * 16, 4);
-	for (uint32_t y = 0; y < 4; y++)
-		for (uint32_t x = 0; x < 4; x++)
+	for (uint32_t y = 0; y < 4; ++y)
+		for (uint32_t x = 0; x < 4; ++x)
 			fwd_transform(fc, y * 4 + x * 16, 1);
-  for (uint32_t z = 0; z < 4; z++)
-    for (uint32_t y = 0; y < 4; y++)
+  for (uint32_t z = 0; z < 4; ++z)
+    for (uint32_t y = 0; y < 4; ++y)
       inv_transform(fc, z + y * 4, 16);
-  for (uint32_t x = 0; x < 4; x++)
-    for (uint32_t z = 0; z < 4; z++)
+  for (uint32_t x = 0; x < 4; ++x)
+    for (uint32_t z = 0; z < 4; ++z)
       inv_transform(fc, z + x * 16, 4);
-  for (uint32_t y = 0; y < 4; y++)
-    for (uint32_t x = 0; x < 4; x++)
+  for (uint32_t y = 0; y < 4; ++y)
+    for (uint32_t x = 0; x < 4; ++x)
       inv_transform(fc, y * 4 + x * 16, 1);
 
   float delta = 0.00001f;
