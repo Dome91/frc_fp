@@ -1,3 +1,14 @@
+/**
+* @Author: Dominique Metz <Dome>
+* @Date:   2016-07-15T16:51:38+02:00
+* @Email:  DominiqueMetz@gmx.de
+* @Project: FRC_FP
+* @Last modified by:   Dome
+* @Last modified time: 2016-07-16T12:28:52+02:00
+*/
+
+
+
 #include <stdlib.h>
 
 #include "transformation.h"

@@ -1,3 +1,14 @@
+/**
+* @Author: Dominique Metz <Dome>
+* @Date:   2016-07-15T15:46:10+02:00
+* @Email:  DominiqueMetz@gmx.de
+* @Project: FRC_FP
+* @Last modified by:   Dome
+* @Last modified time: 2016-07-16T12:28:22+02:00
+*/
+
+
+
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>

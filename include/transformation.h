@@ -1,3 +1,14 @@
+/**
+* @Author: Dominique Metz <Dome>
+* @Date:   2016-07-15T15:49:00+02:00
+* @Email:  DominiqueMetz@gmx.de
+* @Project: FRC_FP
+* @Last modified by:   Dome
+* @Last modified time: 2016-07-16T12:28:04+02:00
+*/
+
+
+
 #ifndef TRANSFORMATION_H
 #define TRANSFORMATION_H
 

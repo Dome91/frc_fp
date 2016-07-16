@@ -1,3 +1,14 @@
+/**
+* @Author: Dominique Metz <Dome>
+* @Date:   2016-07-15T15:52:37+02:00
+* @Email:  DominiqueMetz@gmx.de
+* @Project: FRC_FP
+* @Last modified by:   Dome
+* @Last modified time: 2016-07-16T12:28:35+02:00
+*/
+
+
+
 #include "transformation.h"
 
 void fwd_transform(float_cast* fc, int start, int stride){
