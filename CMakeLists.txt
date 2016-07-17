@@ -9,14 +9,21 @@ if(NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif()
 
+SET(GCC_COVERAGE_COMPILE_FLAGS "-fsyntax-only")
+SET(GCC_COVERAGE_LINK_FLAGS    "-c")
+
 # Include header files
 include_directories(include)
 
 # Include source files
 set(SOURCE
 	src/frc_fp.c
+	src/compression.c
+	src/decompression.c
+	src/encoding.c
 	src/normalization.c
-	src/transformation.c)
+	src/transformation.c
+	src/common.c)
 
 # Specify library
 add_library(frc_fp STATIC ${SOURCE})

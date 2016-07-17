@@ -3,8 +3,8 @@
 * @Date:   2016-07-15T15:46:10+02:00
 * @Email:  DominiqueMetz@gmx.de
 * @Project: FRC_FP
-* @Last modified by:   Dome
-* @Last modified time: 2016-07-16T12:28:22+02:00
+* @Last modified by:   dome
+* @Last modified time: 2016-07-17T12:57:23+02:00
 */
 
 
@@ -25,13 +25,13 @@ char* compress(float* values, int dim, int* sizes, int bits_per_block){
   // Start compression in correct dimension
   switch(dim){
     case 1:
-      compress_1d(values, sizes, bits_per_block, result);
+      compress_1d(values, sizes, bits_per_block, result, num_blocks);
       break;
     case 2:
-      compress_1d(values, sizes, bits_per_block, result);
+      compress_2d(values, sizes, bits_per_block, result);
       break;
     case 3:
-      compress_1d(values, sizes, bits_per_block, result);
+      compress_3d(values, sizes, bits_per_block, result);
       break;
     default:
       printf("Only up to dimension 3 is supported!\n");
@@ -70,7 +70,7 @@ long get_num_blocks(int dim, int* sizes){
   }
 
   int blocksize = pow(4, dim);
-  int num_blocks = num_values / num_blocks;
+  int num_blocks = num_values / blocksize;
   return num_blocks;
 }
 
