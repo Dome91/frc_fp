@@ -4,11 +4,12 @@
 * @Email:  DominiqueMetz@gmx.de
 * @Project: FRC_FP
 * @Last modified by:   dome
-* @Last modified time: 2016-07-17T12:55:27+02:00
+* @Last modified time: 2016-07-18T16:47:39+02:00
 */
 
 #include "common.h"
 #include "compression.h"
+#include "encoding.h"
 #include "transformation.h"
 #include "normalization.h"
 
@@ -17,6 +18,10 @@ void compress_1d(float* data, int *sizes, int bits_per_block, char* dest, int nu
   int block = 0;            // The current block processed
   float_cast fc[blocksize]; // Contains the values of the current block
   char width[blocksize];    // Contains the width of groups
+  BitStream bs;
+  bs.dest = dest;
+  bs.buffer = 0;
+  bs.bit_pos  = 0;
 
   // While there are still blocks to process
   while(block < num_blocks){
@@ -36,8 +41,9 @@ void compress_1d(float* data, int *sizes, int bits_per_block, char* dest, int nu
     width[1] = get_width_of_group(fc + 2, 1, msb);
     width[2] = get_width_of_group(fc + 1, 1, msb);
     width[3] = get_width_of_group(fc + 0, 1, msb);
+    char num_values_in_group[4] = {1, 1, 1, 1};
 
-    //TODO: Implement encoding
+    encode(fc, num_values_in_group, width, bits_per_block, 4, &bs);
   }
 }
 void compress_2d(float* data, int *sizes, int bits_per_block, char* dest){

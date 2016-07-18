@@ -4,7 +4,7 @@
 * @Email:  DominiqueMetz@gmx.de
 * @Project: FRC_FP
 * @Last modified by:   dome
-* @Last modified time: 2016-07-17T12:52:53+02:00
+* @Last modified time: 2016-07-18T16:25:36+02:00
 */
 
 
@@ -13,7 +13,9 @@
 #define COMMON_H
 
 #define MANTISSA_SIZE_F32 23
+#define MANTISSA_SIZE_F64 52
 #define EXPONENT_SIZE_F32 8
+#define EXPONENT_SIZE_F64 11
 #define SIGN_SIZE 1
 
 typedef union {
@@ -24,6 +26,12 @@ typedef union {
     unsigned int sign : SIGN_SIZE;
   } parts;
 } float_cast;
+
+typedef struct{
+  char buffer;
+  char bit_pos;
+  char* dest;
+} BitStream;
 
 char get_width_of_group(float_cast *fc, int num_values, int msb);
 #endif
