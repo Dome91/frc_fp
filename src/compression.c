@@ -4,7 +4,7 @@
 * @Email:  DominiqueMetz@gmx.de
 * @Project: FRC_FP
 * @Last modified by:   dome
-* @Last modified time: 2016-07-18T16:47:39+02:00
+* @Last modified time: 2016-07-19T16:36:55+02:00
 */
 
 #include "common.h"
@@ -46,9 +46,9 @@ void compress_1d(float* data, int *sizes, int bits_per_block, char* dest, int nu
     encode(fc, num_values_in_group, width, bits_per_block, 4, &bs);
   }
 }
-void compress_2d(float* data, int *sizes, int bits_per_block, char* dest){
+void compress_2d(float* data, int *sizes, int bits_per_block, char* dest, int num_blocks){
 
 }
-void compress_3d(float* data, int *sizes, int bits_per_block, char* dest){
+void compress_3d(float* data, int *sizes, int bits_per_block, char* dest, int num_blocks){
 
 }
