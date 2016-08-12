@@ -10,7 +10,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 #SET(GCC_COVERAGE_COMPILE_FLAGS)
-SET(GCC_COVERAGE_LINK_FLAGS    "-c")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -c")
 
 # Include header files
 include_directories(include)
@@ -26,13 +26,15 @@ set(SOURCE
 
 # Specify library
 add_library(frc_fp STATIC ${SOURCE})
+target_link_libraries(frc_fp m)
 
 # Add source files for testing
 set(TEST_SOURCE
 	test/tests.c
 	test/unity.c
 	test/test_normalization.c
-	test/test_transformation.c)
+	test/test_transformation.c
+	test/test_compression.c)
 
 # Add executable for testing
 add_executable(test ${TEST_SOURCE})

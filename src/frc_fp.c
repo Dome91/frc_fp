@@ -4,7 +4,7 @@
 * @Email:  DominiqueMetz@gmx.de
 * @Project: FRC_FP
 * @Last modified by:   dome
-* @Last modified time: 2016-07-19T16:37:52+02:00
+* @Last modified time: 2016-07-25T17:22:48+02:00
 */
 
 
@@ -24,12 +24,15 @@ char* compress(float* values, int dim, int* sizes, int bits_per_block){
   // Start compression in correct dimension
   switch(dim){
     case 1:
+      bits_per_block = bits_per_block == 0 ? MAX_BITRATE_1D : bits_per_block;
       compress_1d(values, sizes, bits_per_block, result, num_blocks);
       break;
     case 2:
+      bits_per_block = bits_per_block == 0 ? MAX_BITRATE_2D : bits_per_block;
       compress_2d(values, sizes, bits_per_block, result, num_blocks);
       break;
     case 3:
+      bits_per_block = bits_per_block == 0 ? MAX_BITRATE_3D : bits_per_block;
       compress_3d(values, sizes, bits_per_block, result, num_blocks);
       break;
     default:
@@ -46,12 +49,15 @@ float* decompress(char* values, int dim, int* sizes, int bits_per_block){
   float* result = (float*) malloc(size_of_result);
   switch (dim) {
     case 1:
+      bits_per_block = bits_per_block == 0 ? MAX_BITRATE_1D : bits_per_block;
       decompress_1d(values, sizes, bits_per_block, result, num_blocks);
       break;
     case 2:
+      bits_per_block = bits_per_block == 0 ? MAX_BITRATE_2D : bits_per_block;
       decompress_2d(values, sizes, bits_per_block, result, num_blocks);
       break;
     case 3:
+      bits_per_block = bits_per_block == 0 ? MAX_BITRATE_3D : bits_per_block;
       decompress_3d(values, sizes, bits_per_block, result, num_blocks);
       break;
     default:

@@ -4,7 +4,7 @@
 * @Email:  DominiqueMetz@gmx.de
 * @Project: FRC_FP
 * @Last modified by:   dome
-* @Last modified time: 2016-07-20T13:56:20+02:00
+* @Last modified time: 2016-07-25T19:44:00+02:00
 **/
 
 #include "encoding.h"
@@ -65,7 +65,7 @@ END:
   return;
 }
 
-int decode(float_cast* fc, char* num_values_in_group, char* width_of_group, int bits_per_block, int num_groups, BitStream *bs){
+int decode(float_cast* fc, char* num_values_in_group, int bits_per_block, int num_groups, BitStream *bs){
   int bit_plane = MANTISSA_SIZE_F32;    // Number of bits in the mantissa
   int current_group = num_groups - 1;   // The current group encoded
   int num_values = 0;                   // Number of values to encode

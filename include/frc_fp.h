@@ -3,14 +3,18 @@
 * @Date:   2016-07-15T13:16:38+02:00
 * @Email:  DominiqueMetz@gmx.de
 * @Project: FRC_FP
-* @Last modified by:   Dome
-* @Last modified time: 2016-07-16T12:27:52+02:00
+* @Last modified by:   dome
+* @Last modified time: 2016-07-25T17:01:25+02:00
 */
 
 
 
 #ifndef FRC_FP_H
 #define FRC_FP_H
+
+#define MAX_BITRATE_1D 104
+#define MAX_BITRATE_2D 392
+#define MAX_BITRATE_3D 1544
 
 struct frc_fp{
   /**
