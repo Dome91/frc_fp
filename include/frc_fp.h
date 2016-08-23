@@ -19,7 +19,7 @@
 struct frc_fp{
   /**
    * Compresses the given floating point values, using bits_per_block bits for every blocks
-   * A block is is (4^dim) floats
+   * A block is (4^dim) floats
    * @param  values         Floating point values to be compressed
    * @param  dim            Dimension of the values
    * @param  sizes          Size of each dimension

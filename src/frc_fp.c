@@ -17,22 +17,28 @@
 #include "frc_fp.h"
 
 char* compress(float* values, int dim, int* sizes, int bits_per_block){
-  long num_blocks = get_num_blocks(dim, sizes);         // Get the number of blocks the source is divided into
-  long size_of_result = num_blocks * bits_per_block / 8;// Calculate the number of bytes the result takes up
-  char* result = (char*) malloc(size_of_result);        // Allocate memory for result
+  long num_blocks = get_num_blocks(dim, sizes); // Get the number of blocks the source is divided into
+  long size_of_result;                          // Calculate the number of bytes the result takes up
+  char* result;                                 // Allocate memory for result
 
   // Start compression in correct dimension
   switch(dim){
     case 1:
       bits_per_block = bits_per_block == 0 ? MAX_BITRATE_1D : bits_per_block;
+      size_of_result = num_blocks * bits_per_block / 8;
+      result = (char*) malloc(size_of_result);
       compress_1d(values, sizes, bits_per_block, result, num_blocks);
       break;
     case 2:
       bits_per_block = bits_per_block == 0 ? MAX_BITRATE_2D : bits_per_block;
+      size_of_result = num_blocks * bits_per_block / 8;
+      result = (char*) malloc(size_of_result);
       compress_2d(values, sizes, bits_per_block, result, num_blocks);
       break;
     case 3:
       bits_per_block = bits_per_block == 0 ? MAX_BITRATE_3D : bits_per_block;
+      size_of_result = num_blocks * bits_per_block / 8;
+      result = (char*) malloc(size_of_result);
       compress_3d(values, sizes, bits_per_block, result, num_blocks);
       break;
     default:

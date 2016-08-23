@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 2.8)
 # Name of project
 project(FRC_FP)
 
+SET(CMAKE_BUILD_TYPE "Debug")
+
 # Set the default build type
 if(NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)

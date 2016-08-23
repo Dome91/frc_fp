@@ -15,12 +15,12 @@
 
 void test_compression(){
   int dim = 1;
-  int size = 1024;
+  int size = 4;
   int bits_per_block = 0;
   float* data = (float*) malloc(size * sizeof(float));
   float* res;
   for(int i = 0; i < size; ++i){
-    data[i] = rand() / RAND_MAX;
+    data[i] = ((float)rand()) / RAND_MAX;
   }
 
   char* compressed = FRC_FP.compress(data, dim, &size, bits_per_block);
@@ -30,4 +30,8 @@ void test_compression(){
   for(int i = 0; i < size; ++i){
     TEST_ASSERT_FLOAT_WITHIN(delta, data[i], res[i]);
   }
+
+  free(data);
+  free(compressed);
+  free(res);
 }

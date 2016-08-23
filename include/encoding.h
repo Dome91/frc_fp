@@ -22,7 +22,7 @@
  * @param bs                  Reference to BitStream struct
  */
 void encode(float_cast* fc, char *num_values_in_group, char* width_of_group, int bits_per_block, int num_groups, BitStream *bs);
-int decode(float_cast* fc, char* num_values_in_group, int bits_per_block, int num_groups, BitStream *bs);
+char decode(float_cast* fc, char* num_values_in_group, int bits_per_block, int num_groups, BitStream *bs);
 
 void write_bit(char bit, BitStream *bs);
 void write_byte(char byte, BitStream *bs);

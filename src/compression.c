@@ -22,7 +22,7 @@ void compress_1d(float* data, int *sizes, int bits_per_block, char* dest, int nu
   BitStream bs;             // Is used to write bits into destination array
   bs.dest    = dest;
   bs.buffer  = 0;
-  bs.bit_pos = 0;
+  bs.bit_pos = 7;
   char num_values_in_group[4] = {1, 1, 1, 1};
 
   // While there are still blocks to process
@@ -68,7 +68,7 @@ void decompress_1d(char* data, int *sizes, int bits_per_block, float* dest, int 
   int blocksize = 4;        // Size of 1-dimensional block
   int block = 0;            // The current block processed
   float_cast fc[blocksize]; // Contains the values of the current block
-  BitStream bs;             // Is used to write bits into destination array
+  BitStream bs;             // Is used to read bits from source array
   bs.dest = data;
   bs.buffer = 0;
   bs.bit_pos  = 7;
@@ -107,5 +107,5 @@ void decompress_2d(char* data, int *sizes, int bits_per_block, float* dest, int 
 }
 
 void decompress_3d(char* data, int *sizes, int bits_per_block, float* dest, int num_blocks){
-  
+
 }

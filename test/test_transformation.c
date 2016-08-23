@@ -21,7 +21,7 @@ void test_fwd_inv_transform(){
   float_cast fc[size_3d];
   float_cast fc_original[size_3d];
   for(int i = 0; i < size_3d; ++i){
-    fc[i].f = rand() / RAND_MAX;
+    fc[i].f = ((float)rand()) / RAND_MAX;
     fc_original[i].f = fc[i].f;
   }
 
