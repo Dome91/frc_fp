@@ -27,11 +27,20 @@ typedef union {
   } parts;
 } float_cast;
 
+typedef union{
+  double f;
+  struct{
+    unsigned long mantissa : MANTISSA_SIZE_F64;
+    unsigned int exponent : EXPONENT_SIZE_F64;
+    unsigned int sign : SIGN_SIZE;
+  } parts;
+} double_cast;
+
 typedef struct{
   char buffer;
   char bit_pos;
   char* dest;
 } BitStream;
 
-char get_width_of_group(float_cast *fc, int num_values, int msb);
+char get_width_of_group(float_cast *fc, int num_values, unsigned int *msb);
 #endif

@@ -42,15 +42,17 @@ void compress_1d(float* data, int *sizes, int bits_per_block, char* dest, int nu
     }
 
     // Normalize and transform values
-    normalize(fc, blocksize);
     fwd_transform(fc, 0, 1);
+    normalize(fc, blocksize);
 
     // Get the width of all four groups
-    int msb = 0;
-    width[0] = get_width_of_group(fc + 3, 1, msb);
-    width[1] = get_width_of_group(fc + 2, 1, msb);
-    width[2] = get_width_of_group(fc + 1, 1, msb);
-    width[3] = get_width_of_group(fc + 0, 1, msb);
+    unsigned int msb = 0;
+    width[0] = get_width_of_group(fc + 3, 1, &msb);
+    width[1] = get_width_of_group(fc + 2, 1, &msb);
+    width[2] = get_width_of_group(fc + 1, 1, &msb);
+    width[3] = get_width_of_group(fc + 0, 1, &msb);
+
+    printf("%d, %d, %d, %d\n", width[0], width[1], width[2], width[3]);
 
     encode(fc, num_values_in_group, width, bits_per_block, 4, &bs);
     block++;

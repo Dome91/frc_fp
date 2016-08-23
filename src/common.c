@@ -11,9 +11,10 @@
 
 #include "common.h"
 
-char get_width_of_group(float_cast *fc, int num_values, int msb){
+char get_width_of_group(float_cast *fc, int num_values, unsigned int *msb){
   for(int i = 0; i < num_values; ++i){
-    msb |= fc[i].parts.mantissa;
+    *msb |= fc[i].parts.mantissa;
   }
-  return 23 - __builtin_clz(msb);
+
+  return 31 - __builtin_clz(*msb);
 }
