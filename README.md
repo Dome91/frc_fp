@@ -23,10 +23,10 @@ make
 sudo make install
 
 ## Code Example
-# Compression
+Compression:
 unsigned char* compressed = FRC_FP.compress(data, dims, sizes, bits_per_block);
 
-#Decompression
+Decompression:
 float* decompressed = FRC_FP.decompress(data, dim, sizes, bits_per_block);
 
 For more information, regarding parameters and such, take a look at include/frc_fp.h
