@@ -3,8 +3,8 @@
 * @Date:   2016-07-15T16:47:20+02:00
 * @Email:  DominiqueMetz@gmx.de
 * @Project: FRC_FP
-* @Last modified by:   Dome
-* @Last modified time: 2016-07-16T12:29:01+02:00
+* @Last modified by:   dome
+* @Last modified time: 2016-09-23T19:48:46+02:00
 */
 
 
@@ -14,10 +14,10 @@
 #include "test/test_transformation.h"
 #include "test/test_compression.h"
 
-int main(int argc, char** argv){
+int main(){
   UNITY_BEGIN();
   RUN_TEST(test_normalize_denormalize);
   RUN_TEST(test_fwd_inv_transform);
-  RUN_TEST(test_compression);
+  RUN_TEST(test_compression_1d);
   return UNITY_END();
 }

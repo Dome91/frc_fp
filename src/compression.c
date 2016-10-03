@@ -4,7 +4,7 @@
 * @Email:  DominiqueMetz@gmx.de
 * @Project: FRC_FP
 * @Last modified by:   dome
-* @Last modified time: 2016-07-25T20:03:53+02:00
+* @Last modified time: 2016-09-22T17:50:47+02:00
 */
 
 #include "common.h"
@@ -13,26 +13,25 @@
 #include "transformation.h"
 #include "normalization.h"
 
-void compress_1d(float* data, int *sizes, int bits_per_block, char* dest, int num_blocks){
-  int x_dim = sizes[0];     // Number of values
-  int blocksize = 4;        // Size of 1-dimensional block
-  int block = 0;            // The current block processed
+void compress_1d(float* data, int32_t *sizes, int32_t bits_per_block, uint8_t* dest, int32_t num_blocks){
+  int32_t x_dim = sizes[0];     // Number of values
+  int32_t blocksize = 4;        // Size of 1-dimensional block
+  int32_t block = 0;            // The current block processed
   float_cast fc[blocksize]; // Contains the values of the current block
-  char width[blocksize];    // Contains the width of groups
+  uint8_t width[blocksize]; // Contains the width of groups
   BitStream bs;             // Is used to write bits into destination array
   bs.dest    = dest;
   bs.buffer  = 0;
   bs.bit_pos = 7;
-  char num_values_in_group[4] = {1, 1, 1, 1};
+  uint8_t num_values_in_group[4] = {1, 1, 1, 1};
 
   // While there are still blocks to process
   while(block < num_blocks){
-    int start_pos = block * blocksize;
+    int32_t start_pos = block * blocksize;
     float* start_block = data + start_pos;  // Jump to the beginning of the current block
 
     // Copy values into the block
-    for(int i = 0; i < blocksize; ++i){
-      // For the last block, it is possible
+    for(int32_t i = 0; i < blocksize; ++i){
       if(i + start_pos < x_dim){
         fc[i].f = start_block[i];
       }
@@ -52,29 +51,31 @@ void compress_1d(float* data, int *sizes, int bits_per_block, char* dest, int nu
     width[2] = get_width_of_group(fc + 1, 1, &msb);
     width[3] = get_width_of_group(fc + 0, 1, &msb);
 
-    printf("%d, %d, %d, %d\n", width[0], width[1], width[2], width[3]);
-
     encode(fc, num_values_in_group, width, bits_per_block, 4, &bs);
     block++;
   }
+
+  flush(&bs);
 }
-void compress_2d(float* data, int *sizes, int bits_per_block, char* dest, int num_blocks){
+/*
+void compress_2d(float* data, int32_t *sizes, int32_t bits_per_block, uint8_t* dest, int32_t num_blocks){
 
 }
-void compress_3d(float* data, int *sizes, int bits_per_block, char* dest, int num_blocks){
+
+void compress_3d(float* data, int32_t *sizes, int32_t bits_per_block, uint8_t* dest, int32_t num_blocks){
 
 }
-
-void decompress_1d(char* data, int *sizes, int bits_per_block, float* dest, int num_blocks){
-  int x_dim = sizes[0];     // Number of values
-  int blocksize = 4;        // Size of 1-dimensional block
-  int block = 0;            // The current block processed
+*/
+void decompress_1d(uint8_t* data, int32_t *sizes, int32_t bits_per_block, float* dest, int32_t num_blocks){
+  int32_t x_dim = sizes[0]; // Number of values
+  int32_t blocksize = 4;    // Size of 1-dimensional block
+  int32_t block = 0;        // The current block processed
   float_cast fc[blocksize]; // Contains the values of the current block
   BitStream bs;             // Is used to read bits from source array
   bs.dest = data;
   bs.buffer = 0;
-  bs.bit_pos  = 7;
-  char num_values_in_group[4] = {1, 1, 1, 1};
+  bs.bit_pos  = -1;
+  uint8_t num_values_in_group[4] = {1, 1, 1, 1};
 
   while(block < num_blocks){
     int start_pos = block * blocksize;
@@ -84,14 +85,13 @@ void decompress_1d(char* data, int *sizes, int bits_per_block, float* dest, int 
     }
 
     // Decode values and set exponent
-    int exponent = decode(fc, num_values_in_group, bits_per_block, 4, &bs);
+    uint8_t exponent = decode(fc, num_values_in_group, bits_per_block, 4, &bs);
     for(int i = 0; i < blocksize; ++i){
       fc[i].parts.exponent = exponent;
     }
 
 		// Denormalize values
 		denormalize(fc, 4);
-
 		// Inverse transform to correlate values
 		inv_transform(fc, 0, 1);
 
@@ -104,10 +104,17 @@ void decompress_1d(char* data, int *sizes, int bits_per_block, float* dest, int 
     block++;
   }
 }
-
-void decompress_2d(char* data, int *sizes, int bits_per_block, float* dest, int num_blocks){
+/*
+void decompress_2d(uint8_t* data, int32_t *sizes, int32_t bits_per_block, float* dest, int32_t num_blocks){
 }
 
-void decompress_3d(char* data, int *sizes, int bits_per_block, float* dest, int num_blocks){
+void decompress_3d(uint8_t* data, int32_t *sizes, int32_t bits_per_block, float* dest, int32_t num_blocks){
 
+}
+*/
+void flush(BitStream *bs){
+  bs->dest[0] = bs->buffer;
+  bs->dest++;
+  bs->buffer = 0;
+  bs->bit_pos = 7;
 }

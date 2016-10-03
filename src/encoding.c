@@ -4,55 +4,60 @@
 * @Email:  DominiqueMetz@gmx.de
 * @Project: FRC_FP
 * @Last modified by:   dome
-* @Last modified time: 2016-07-25T19:44:00+02:00
+* @Last modified time: 2016-09-24T13:29:52+02:00
 **/
 
 #include "encoding.h"
 
-void encode(float_cast* fc, char *num_values_in_group, char* width_of_group, int bits_per_block, int num_groups, BitStream *bs){
-  int bit_plane = MANTISSA_SIZE_F32;    // Number of bits in the mantissa
+void encode(float_cast* fc, uint8_t* num_values_in_group, uint8_t* width_of_group, int32_t bits_per_block, int32_t num_groups, BitStream *bs){
+  int bit_plane = MANTISSA_SIZE_F32 - 1;    // Number of bits in the mantissa
   int current_group = num_groups - 1;   // The current group encoded
   int num_values = 0;                   // Number of values to encode
   write_byte(fc[0].parts.exponent, bs); // Write the exponent of the block
   bits_per_block -= 8;                  // Subtract 8 Bits for exponent
-  // output one bit plane at a time from MSB to LSB
-  for (bit_plane = MANTISSA_SIZE_F32, num_values = 0;  bit_plane-- > 0;) {
-    // encode bit plane k
-    for (int i = 0;;) {
-      // encode group of significant values
-      for (; i < num_values; i++) {
-        // encode bit k of data[i]
-        char sign = fc[i].parts.sign;
-				char mantissa_bit = fc[i].parts.mantissa >> bit_plane;
 
-        // write bit k of |data[i]|
+  // Encode one bitplane at a time
+  for(bit_plane = MANTISSA_SIZE_F32, num_values = 0;  bit_plane-- > 0;){
+    // Encode bit_plane
+    for(int i = 0;;){
+      // Encode the group of significant values
+      for(; i < num_values; i++){
+        uint32_t sign = fc[i].parts.sign;
+				uint8_t mantissa_bit = fc[i].parts.mantissa >> bit_plane;
+
+        // Write bit "bit_plane" of fc[i]
         write_bit(mantissa_bit & 1, bs);
-        if (!--bits_per_block)
+        if(!--bits_per_block){
           goto END_ENCODE;
-        if (mantissa_bit == 1) {
-          // write sign bit also
+        }
+        // Write the sign, when mantissa_bit is the most significant bit with a one
+        if(mantissa_bit == 1){
           write_bit(sign, bs);
-          if (!--bits_per_block)
+          if(!--bits_per_block){
             goto END_ENCODE;
+          }
         }
       }
-      // have all groups been encoded?
-      if (current_group < 0)
+      // Continue with next bitplane, if all groups have been added to the encoding process
+      if(current_group < 0){
         break;
-      // test next group
-      if (width_of_group[current_group] > bit_plane) {
-        // group is significant; peel off and encode first subgroup
+      }
+      // Test next group
+      if(width_of_group[current_group] > bit_plane){
+        // Signal significance and add the next values to the encoding process
         write_bit(1, bs);
-        if (!--bits_per_block)
+        if (!--bits_per_block){
           goto END_ENCODE;
+        }
         num_values += num_values_in_group[current_group];
         current_group--;
       }
-      else {
-        // group is insignificant; continue with next bit plane
+      else{
+        // Signal insignificance, continue with next bitplane
         write_bit(0, bs);
-        if (!--bits_per_block)
+        if(!--bits_per_block){
           goto END_ENCODE;
+        }
         break;
       }
     }
@@ -67,45 +72,46 @@ END_ENCODE:
   return;
 }
 
-char decode(float_cast* fc, char* num_values_in_group, int bits_per_block, int num_groups, BitStream *bs){
-  int bit_plane = MANTISSA_SIZE_F32;    // Number of bits in the mantissa
-  int current_group = num_groups - 1;   // The current group encoded
-  int num_values = 0;                   // Number of values to encode
-  int exponent = read_byte(bs);         // Write the exponent of the block
-  bits_per_block -= 8;                  // Subtract 8 Bits for exponent
+uint8_t decode(float_cast* fc, uint8_t* num_values_in_group, int32_t bits_per_block, int32_t num_groups, BitStream *bs){
+  int32_t bit_plane = MANTISSA_SIZE_F32;    // Number of bits in the mantissa
+  int32_t current_group = num_groups - 1;   // The current group encoded
+  int32_t num_values = 0;                   // Number of values to encode
+  uint8_t exponent = read_byte(bs);         // Write the exponent of the block
+  uint32_t bit = 0;
+  bits_per_block -= 8;                      // Subtract 8 Bits for exponent
 
-
-  // input one bit plane at a time from MSB to LSB
+  // Decode one bitplane at a time
   for(bit_plane = MANTISSA_SIZE_F32, num_values = 0; bit_plane-- > 0;){
-    // decode bit plane k
-    for(int i = 0;;){
-      // decode group of significant values
-      for(; i < num_values; i++){
-        // read bit k of |data[i]|
-        int mantissa_bit = read_bit(bs) << bit_plane;
+    // Decode bitplane
+    for(int32_t i = 0;;){
+      // Decode group
+      for(; i < num_values; ++i){
+        //Read bit "bit_plane" from fc[i]
+        bit = read_bit(bs);
+        bit <<= bit_plane;
 				if(!--bits_per_block){
           goto END_DECODE;
         }
 
         if(fc[i].parts.mantissa){
-          fc[i].parts.mantissa += mantissa_bit;
+          fc[i].parts.mantissa |= bit;
         }
-        else if(mantissa_bit) {
-          // read sign bit also
+        else if(bit){
+          // If this is the first bit of this value, read also the sign of it
           fc[i].parts.sign = read_bit(bs);
-					fc[i].parts.mantissa = mantissa_bit;
+					fc[i].parts.mantissa = bit;
 					if(!--bits_per_block){
             goto END_DECODE;
           }
         }
       }
-      // have all groups been decoded?
+      // Continue with next bitplane, if all groups have been added to the decoding process
       if(current_group < 0){
         break;
       }
-      // test next group
+      // Test next group for significance
       if(read_bit(bs)){
-        // group is significant; peel off and decode first subgroup
+        // If significant, add to decoding process
         num_values += num_values_in_group[current_group];
         current_group--;
 				if(!--bits_per_block){
@@ -113,15 +119,16 @@ char decode(float_cast* fc, char* num_values_in_group, int bits_per_block, int n
         }
       }
       else{
-				if (!--bits_per_block){
+				if(!--bits_per_block){
           goto END_DECODE;
         }
-        // group is insignificant; continue with next bit plane
+        // Group is insignificant, go on with next bit plane
         break;
       }
     }
   }
 
+  // Read left over bits
   while(bits_per_block-- > 0){
     read_bit(bs);
   }
@@ -130,32 +137,32 @@ END_DECODE:
   return exponent;
 }
 
-char read_byte(BitStream *bs){
-  char byte = 0;
-  for(int i = 7; i >= 0; --i){
+uint8_t read_byte(BitStream *bs){
+  uint8_t byte = 0;
+  for(int32_t i = 7; i >= 0; --i){
     byte |= read_bit(bs) << i;
   }
   return byte;
 }
 
-char read_bit(BitStream *bs){
+uint8_t read_bit(BitStream *bs){
   if(bs->bit_pos < 0){
     bs->buffer = bs->dest[0];
     bs->dest++;
     bs->bit_pos = 7;
   }
-  char bit = bs->buffer >> bs->bit_pos;
+  uint8_t bit = bs->buffer >> bs->bit_pos;
   bs->bit_pos--;
-  return bit;
+  return bit & 1;
 }
 
-void write_byte(char byte, BitStream *bs){
-  for(int i = 7; i >= 0; --i){
+void write_byte(uint8_t byte, BitStream *bs){
+  for(int32_t i = 7; i >= 0; --i){
     write_bit(byte >> i, bs);
   }
 }
 
-void write_bit(char bit, BitStream *bs){
+void write_bit(uint8_t bit, BitStream *bs){
   bs->buffer |= bit << bs->bit_pos;
   bs->bit_pos--;
   if(bs->bit_pos < 0){
