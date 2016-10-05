@@ -14,19 +14,22 @@ I implemented this only for educational purposes.
 At the moment, only 1 - dimensional arrays can be compressed and decompressed.
 
 ## Installation
-git clone https://github.com/Dome91/frc_fp.git
-cd frc_fp
-mkdir build
-cd build
-cmake ..
-make
-sudo make install
+    git clone https://github.com/Dome91/frc_fp.git
+    cd frc_fp
+    mkdir build
+    cd build
+    cmake ..
+    make
+    sudo make install
 
 ## Code Example
 Compression:
-unsigned char* compressed = FRC_FP.compress(data, dims, sizes, bits_per_block);
+
+    unsigned char* compressed = FRC_FP.compress(data, dims, sizes, bits_per_block);
+
 
 Decompression:
-float* decompressed = FRC_FP.decompress(data, dim, sizes, bits_per_block);
+
+    float* decompressed = FRC_FP.decompress(data, dim, sizes, bits_per_block);
 
 For more information, regarding parameters and such, take a look at include/frc_fp.h
